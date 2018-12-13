@@ -780,6 +780,51 @@ export function updateLayout(plotlyElement, layout, updatePlot) {
     'oTransform',
   ], prop => has(plotlyElement.style, prop));
 
+  // box plot datalabels
+  if (isUndefined(layout.annotations)) { layout.annotations = []; }
+
+  each(plotlyElement.calcdata[0], (cd, i) => {
+    const median = cd.med;
+    const q1 = cd.q1;
+    const q3 = cd.q3;
+    const upper = cd.uf;
+    const lower = cd.lf;
+    const bdPos = cd.t.bdPos;
+
+    const annotations = [{
+      text: parseFloat(median.toFixed(3)),
+      x: i + bdPos,
+      y: median,
+      showarrow: false,
+      xanchor: 'left',
+    }, {
+      text: parseFloat(q1.toFixed(3)),
+      x: i + bdPos,
+      y: q1,
+      showarrow: false,
+      xanchor: 'left',
+    }, {
+      text: parseFloat(q3.toFixed(3)),
+      x: i + bdPos,
+      y: q3,
+      showarrow: false,
+      xanchor: 'left',
+    }, {
+      text: parseFloat(upper.toFixed(3)),
+      x: i + bdPos,
+      y: upper,
+      showarrow: false,
+      xanchor: 'left',
+    }, {
+      text: parseFloat(lower.toFixed(3)),
+      x: i + bdPos,
+      y: lower,
+      showarrow: false,
+      xanchor: 'left',
+    }];
+    layout.annotations = layout.annotations.concat(annotations);
+  });
+
   if (layout.width <= 600) {
     // change legend orientation to horizontal; plotly has a bug with this
     // legend alignment - it does not preserve enough space under the plot;
