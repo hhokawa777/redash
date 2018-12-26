@@ -274,6 +274,11 @@
                 </a>
               </li>
               <li>
+                <a ng-click="showImageDialog(selectedTab)" ng-if="!query.isNew()">
+                  <span class="zmdi zmdi-code"></span> Show Image
+                </a>
+              </li>
+              <li>
                 <a query-result-link target="_self" ng-disabled="queryExecuting || !queryResult.getData()">
                   <span class="fa fa-file-o"></span> Download as CSV File
                 </a>

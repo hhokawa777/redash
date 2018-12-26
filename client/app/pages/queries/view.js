@@ -469,6 +469,20 @@ function QueryViewCtrl(
     });
   };
 
+  $scope.showImageDialog = (visId) => {
+    const visualization = getVisualization(visId);
+    const svg = window.document.querySelector('.query__vis SVG');
+    const data = new XMLSerializer().serializeToString(svg);
+    visualization.imageUrl = 'data:image/svg+xml;charset=utf-8;base64,'
+      + btoa(unescape(encodeURIComponent(data)));
+    $uibModal.open({
+      component: 'embedImageDialog',
+      resolve: {
+        visualization,
+      },
+    });
+  };
+
   $scope.$watch(
     () => $location.hash(),
     (hash) => {
