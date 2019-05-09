@@ -379,6 +379,34 @@ function prepareHeatmapData(seriesList, options) {
 }
 
 function prepareChartData(seriesList, options) {
+  // should create a map of possible pairs first. Only a pair is connectable.
+  // zIndex
+  // dot size
+  // line color
+  // line hover diff value
+  // showlegend = false
+  // visible = false for data labels?
+  if (seriesList[0] && seriesList[1]) {
+    for (let i = 0; i < seriesList[0].data.length; i += 1) {
+      const segments = {
+        name: '_segments',
+        type: 'column',
+        data: [
+          { x: seriesList[0].data[i].x, y: seriesList[0].data[i].y },
+          { x: seriesList[1].data[i].x, y: seriesList[1].data[i].y },
+        ],
+      };
+      seriesList.push(segments);
+    }
+  }
+
+  options.seriesOptions._segments = {
+    zIndex: 2,
+    index: 0,
+    type: 'line',
+    yAxis: 0,
+  };
+
   const sortX = (options.sortX === true) || (options.sortX === undefined);
 
   const formatNumber = createFormatter({
@@ -406,7 +434,7 @@ function prepareChartData(seriesList, options) {
 
     // For bubble/scatter charts `y` may be any (similar to `x`) - numeric is only bubble size;
     // for other types `y` is always number
-    const cleanYValue = includes(['bubble', 'scatter'], seriesOptions.type) ? normalizeValue : cleanNumber;
+    const cleanYValue = includes(['bubble', 'scatter', 'line'], seriesOptions.type) ? normalizeValue : cleanNumber;
 
     const sourceData = new Map();
     const xValues = [];
