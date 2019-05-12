@@ -5,6 +5,7 @@ import 'pivottable';
 import 'pivottable/dist/pivot.css';
 import { angular2react } from 'angular2react';
 import { registerVisualization } from '@/visualizations';
+import 'pivottable/dist/plotly_renderers';
 
 import './pivot.less';
 
@@ -13,6 +14,11 @@ import Editor from './Editor';
 const DEFAULT_OPTIONS = {
   controls: {
     enabled: false, // `false` means "show controls" o_O
+  },
+  rendererOptions: {
+    plotlyConfig: {
+      displaylogo: false,
+    },
   },
 };
 
@@ -31,7 +37,10 @@ const PivotTableRenderer = {
       // it which interferes with other visualizations.
       const data = angular.copy(this.data.rows);
       const options = {
-        renderers: $.pivotUtilities.renderers,
+        renderers: $.extend(
+          $.pivotUtilities.renderers,
+          $.pivotUtilities.plotly_renderers,
+        ),
         onRefresh: (config) => {
           if (this.onOptionsChange) {
             config = omit(config, [
