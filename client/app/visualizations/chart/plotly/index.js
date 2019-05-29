@@ -6,6 +6,7 @@ import pie from 'plotly.js/lib/pie';
 import histogram from 'plotly.js/lib/histogram';
 import box from 'plotly.js/lib/box';
 import heatmap from 'plotly.js/lib/heatmap';
+import funnel from 'plotly.js/lib/funnel';
 
 import {
   prepareData,
@@ -15,7 +16,7 @@ import {
   normalizeValue,
 } from './utils';
 
-Plotly.register([bar, pie, histogram, box, heatmap]);
+Plotly.register([bar, pie, histogram, box, heatmap, funnel]);
 Plotly.setPlotConfig({
   modeBarButtonsToRemove: ['sendDataToCloud'],
 });

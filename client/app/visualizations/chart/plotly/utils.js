@@ -153,6 +153,9 @@ function setType(series, type, options) {
       series.type = 'box';
       series.mode = 'markers';
       break;
+    case 'funnel':
+      series.type = 'funnel';
+      break;
     default:
       break;
   }
@@ -406,7 +409,7 @@ function prepareChartData(seriesList, options) {
 
     // For bubble/scatter charts `y` may be any (similar to `x`) - numeric is only bubble size;
     // for other types `y` is always number
-    const cleanYValue = includes(['bubble', 'scatter'], seriesOptions.type) ? normalizeValue : cleanNumber;
+    const cleanYValue = includes(['bubble', 'scatter', 'funnel'], seriesOptions.type) ? normalizeValue : cleanNumber;
 
     const sourceData = new Map();
     const xValues = [];
@@ -614,7 +617,7 @@ function updateSeriesText(seriesList, options) {
       };
       const item = series.sourceData.get(x);
       if (item) {
-        text['@@y'] = includes(['bubble', 'scatter'], seriesOptions.type) ? item.y : series.formatNumber(item.y);
+        text['@@y'] = includes(['bubble', 'scatter', 'funnel'], seriesOptions.type) ? item.y : series.formatNumber(item.y);
         if (item.yError !== undefined) {
           text['@@yError'] = series.formatNumber(item.yError);
         }

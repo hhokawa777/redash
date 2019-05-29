@@ -120,6 +120,7 @@ const ChartEditor = {
       scatter: { name: 'Scatter', icon: 'circle-o' },
       bubble: { name: 'Bubble', icon: 'circle-o' },
       heatmap: { name: 'Heatmap', icon: 'th' },
+      funnel: { name: 'Funnel', icon: 'filter' },
       box: { name: 'Box', icon: 'square-o' },
     };
 
