@@ -153,6 +153,9 @@ function setType(series, type, options) {
       series.type = 'box';
       series.mode = 'markers';
       break;
+    case 'sunburst':
+      series.type = 'sunburst';
+      break;
     default:
       break;
   }
@@ -437,7 +440,10 @@ function prepareChartData(seriesList, options) {
       visible: true,
       hoverinfo,
       x: xValues,
+      values: yValues,
       y: yValues,
+      labels: xValues,
+      parents: map(data, row => row.$raw.parent),
       error_y: {
         array: yErrorValues,
         color: seriesColor,
@@ -538,6 +544,9 @@ export function prepareLayout(element, seriesList, options, data) {
       result.boxmode = 'group';
       result.boxgroupgap = 0.50;
     }
+
+    result.sunburstcolorway = ColorPaletteArray;
+    result.extendsunburstcolors = false;
 
     result.xaxis = {
       title: getTitle(options.xAxis),

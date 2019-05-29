@@ -6,6 +6,7 @@ import pie from 'plotly.js/lib/pie';
 import histogram from 'plotly.js/lib/histogram';
 import box from 'plotly.js/lib/box';
 import heatmap from 'plotly.js/lib/heatmap';
+import sunburst from 'plotly.js/lib/sunburst';
 
 import {
   prepareData,
@@ -15,7 +16,7 @@ import {
   normalizeValue,
 } from './utils';
 
-Plotly.register([bar, pie, histogram, box, heatmap]);
+Plotly.register([bar, pie, histogram, box, heatmap, sunburst]);
 Plotly.setPlotConfig({
   modeBarButtonsToRemove: ['sendDataToCloud'],
 });

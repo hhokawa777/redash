@@ -120,6 +120,7 @@ const ChartEditor = {
       scatter: { name: 'Scatter', icon: 'circle-o' },
       bubble: { name: 'Bubble', icon: 'circle-o' },
       heatmap: { name: 'Heatmap', icon: 'th' },
+      sunburst: { name: 'Sunburst', icon: 'sun-o' },
       box: { name: 'Box', icon: 'square-o' },
     };
 
