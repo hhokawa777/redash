@@ -153,6 +153,9 @@ function setType(series, type, options) {
       series.type = 'box';
       series.mode = 'markers';
       break;
+    case 'radar':
+      series.mode = 'markers+lines' + (options.showDataLabels ? '+text' : '');
+      break;
     default:
       break;
   }
@@ -270,6 +273,71 @@ function preparePieData(seriesList, options) {
       sourceData,
       formatNumber,
       formatPercent,
+      formatText,
+    };
+  });
+}
+
+function prepareRadarData(seriesList, options) {
+  const formatNumber = createFormatter({
+    displayAs: 'number',
+    numberFormat: options.numberFormat,
+  });
+  const formatText = options.textFormat === ''
+    ? defaultFormatSeriesText :
+    item => formatSimpleTemplate(options.textFormat, item);
+
+  return map(seriesList, (series, index) => {
+    const seriesOptions = options.seriesOptions[series.name] ||
+      { type: options.globalSeriesType };
+    const seriesColor = getSeriesColor(seriesOptions, index);
+    if (options.sortX) {
+      series.data = sortBy(series.data, 'x');
+    }
+    if (options.reverseX) {
+      series.data = series.data.reverse();
+    }
+    series.data.push(series.data[0]);
+
+    setType(series, seriesOptions.type, options);
+
+    const sourceData = new Map();
+    each(series.data, (row) => {
+      const x = normalizeValue(row.x);
+      const y = cleanNumber(row.y);
+      sourceData.set(x, {
+        x,
+        y,
+        raw: extend({}, row.$raw, {
+          // use custom display format - see also `updateSeriesText`
+          '@@x': normalizeValue(row.x, options.xAxis.type, options.dateTimeFormat),
+        }),
+      });
+    });
+
+    return {
+      visible: true,
+      r: map(series.data, i => i.y),
+      theta: map(series.data, i => i.x),
+      type: 'scatterpolar',
+      mode: series.mode,
+      fill: options.fillRadar ? 'toself' : 'none',
+      connectgaps: 'true',
+      line: {
+        color: seriesColor,
+      },
+      marker: {
+        colors: seriesColor,
+      },
+      text: [],
+      textposition: 'top right',
+      textfont: { color: seriesColor },
+      hoverinfo: 'r+theta+name',
+      name: series.name,
+      // title: series.name,
+      subplot: options.noSubplot ? null : 'polar' + (index > 0 ? index + 1 : ''),
+      sourceData,
+      formatNumber,
       formatText,
     };
   });
@@ -489,6 +557,9 @@ export function prepareData(seriesList, options) {
   if (options.globalSeriesType === 'pie') {
     return preparePieData(seriesList, options);
   }
+  if (options.globalSeriesType === 'radar') {
+    return prepareRadarData(seriesList, options);
+  }
   if (options.globalSeriesType === 'heatmap') {
     return flatten(prepareHeatmapData(seriesList, options));
   }
@@ -497,7 +568,7 @@ export function prepareData(seriesList, options) {
 
 export function prepareLayout(element, seriesList, options, data) {
   const {
-    cellsInRow, cellWidth, cellHeight, xPadding, hasY2,
+    cellsInRow, cellWidth, cellHeight, xPadding, yPadding, hasY2,
   } = calculateDimensions(seriesList, options);
 
   const result = {
@@ -594,6 +665,48 @@ export function prepareLayout(element, seriesList, options, data) {
     if (options.series.stacking) {
       result.barmode = 'relative';
     }
+
+    if (options.globalSeriesType === 'radar') {
+      if (options.noSubplot) {
+        result.polar = [];
+        result.margin.b = 20;
+        result.polar.radialaxis = {
+          range: [options.yAxis[0].rangeMin, options.yAxis[0].rangeMax],
+          type: getScaleType(options.yAxis[0].type),
+        };
+        if (!options.xAxis.labels.enabled) {
+          result.polar.angularaxis = {
+            ticks: '',
+            showticklabels: false,
+          };
+        }
+      } else {
+        each(seriesList, (series, index) => {
+          const xPosition = (index % cellsInRow) * cellWidth;
+          const yPosition = Math.floor(index / cellsInRow) * cellHeight;
+          const subplotid = (index > 0 ? index + 1 : '');
+
+          result['polar' + subplotid] = {};
+          result.margin.b = 20;
+
+          result['polar' + subplotid].radialaxis = {
+            range: [options.yAxis[0].rangeMin, options.yAxis[0].rangeMax],
+            type: getScaleType(options.yAxis[0].type),
+          };
+
+          if (!options.xAxis.labels.enabled) {
+            result['polar' + subplotid].angularaxis = {
+              ticks: '',
+              showticklabels: false,
+            };
+          }
+          result['polar' + subplotid].domain = {
+            x: [xPosition, xPosition + cellWidth - xPadding],
+            y: [yPosition, yPosition + cellHeight - yPadding],
+          };
+        });
+      }
+    }
   }
 
   return result;
@@ -606,7 +719,13 @@ function updateSeriesText(seriesList, options) {
 
     series.text = [];
     series.hover = [];
-    const xValues = (options.globalSeriesType === 'pie') ? series.labels : series.x;
+    const xValues = (() => {
+      switch (options.globalSeriesType) {
+        case 'pie': return series.labels;
+        case 'radar': return series.theta;
+        default: return series.x;
+      }
+    })();
     xValues.forEach((x) => {
       const text = {
         '@@name': series.name,

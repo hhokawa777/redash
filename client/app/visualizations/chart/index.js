@@ -117,6 +117,7 @@ const ChartEditor = {
       column: { name: 'Bar', icon: 'bar-chart' },
       area: { name: 'Area', icon: 'area-chart' },
       pie: { name: 'Pie', icon: 'pie-chart' },
+      radar: { name: 'Radar', icon: 'bullseye' },
       scatter: { name: 'Scatter', icon: 'circle-o' },
       bubble: { name: 'Bubble', icon: 'circle-o' },
       heatmap: { name: 'Heatmap', icon: 'th' },
