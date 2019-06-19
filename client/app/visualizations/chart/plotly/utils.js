@@ -155,6 +155,7 @@ function setType(series, type, options) {
       break;
     case 'funnel':
       series.type = 'funnel';
+      series.textinfo = options.showDataLabels ? 'percent initial+percent previous+percent total+value' : 'none';
       break;
     default:
       break;
