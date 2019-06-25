@@ -237,7 +237,7 @@
 
       <div class="form-group">
         <label class="control-label">Scale</label>
-        <ui-select ng-model="yAxis.type">
+        <ui-select ng-model="yAxis.type" ng-disabled="$ctrl.options.scaleanchor">
           <ui-select-match placeholder="Choose Scale...">{{$select.selected | capitalize}}</ui-select-match>
           <ui-select-choices repeat="scaleType in $ctrl.yAxisScales">
             <div ng-bind-html="scaleType | capitalize | highlight: $select.search"></div>
@@ -271,6 +271,12 @@
         </label>
       </div>
 
+      <div class="checkbox" ng-if="['box', 'pie'].indexOf($ctrl.options.globalSeriesType) == -1">
+        <label>
+          <input type="checkbox" ng-model="$ctrl.options.scaleanchor">
+          <i class="input-helper"></i> Use X axis scale and zoom
+        </label>
+      </div>
     </div>
   </div>
 

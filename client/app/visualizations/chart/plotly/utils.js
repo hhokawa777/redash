@@ -562,6 +562,7 @@ export function prepareLayout(element, seriesList, options, data) {
         title: getTitle(options.yAxis[0]),
         type: getScaleType(options.yAxis[0].type),
         automargin: true,
+        scaleanchor: options.scaleanchor ? 'x' : false,
       };
 
       if (isNumber(options.yAxis[0].rangeMin) || isNumber(options.yAxis[0].rangeMax)) {
