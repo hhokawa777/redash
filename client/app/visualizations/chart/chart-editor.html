@@ -216,6 +216,31 @@
       </label>
     </div>
 
+
+    <div class="form-group"
+      ng-if="$ctrl.options.xAxis.type == 'category' && $ctrl.options.sortX">
+      <label class="control-label">Sort Category by</label>
+      <ui-select ng-model="$ctrl.options.xSortKind">
+        <ui-select-match placeholder="Sort type...">
+          <div>
+            {{$select.selected.label}}
+          </div>
+        </ui-select-match>
+        <ui-select-choices repeat="sortType.value as sortType in $ctrl.sortTypes">
+          <div>
+            <span ng-bind-html="sortType.label | highlight: $select.search"></span>
+          </div>
+        </ui-select-choices>
+      </ui-select>
+    </div>
+
+    <div class="form-group" ng-if="$ctrl.options.xAxis.type == 'category' && $ctrl.options.sortX && $ctrl.options.xSortKind == 'array'">
+      <label class="control-label">Custom Sort Order</label>
+      <input ng-model="$ctrl.options.xSortCustom" type="text" class="form-control">
+    </div>
+
+
+
     <div class="checkbox">
       <label>
         <input type="checkbox" ng-model="$ctrl.options.reverseX">

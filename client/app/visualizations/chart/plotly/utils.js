@@ -546,10 +546,15 @@ export function prepareLayout(element, seriesList, options, data) {
     };
 
     if (options.sortX && result.xaxis.type === 'category') {
-      if (options.reverseX) {
-        result.xaxis.categoryorder = 'category descending';
+      if (options.xSortKind === 'array') {
+        result.xaxis.categoryorder = 'array';
+        result.xaxis.categoryarray = JSON.parse(options.xSortCustom);
       } else {
-        result.xaxis.categoryorder = 'category ascending';
+        if (options.reverseX) {
+          result.xaxis.categoryorder = options.xSortKind + ' descending';
+        } else {
+          result.xaxis.categoryorder = options.xSortKind + ' ascending';
+        }
       }
     }
 

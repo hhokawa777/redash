@@ -21,6 +21,7 @@ const DEFAULT_OPTIONS = {
   valuesOptions: {},
   columnMapping: {},
   direction: { type: 'counterclockwise' },
+  xSortKind: 'category',
 
   // showDataLabels: false, // depends on chart type
   numberFormat: '0,0[.]00000',
@@ -122,6 +123,18 @@ const ChartEditor = {
       heatmap: { name: 'Heatmap', icon: 'th' },
       box: { name: 'Box', icon: 'square-o' },
     };
+
+    this.sortTypes = [
+      // array & trace
+      { label: 'Category Name Alphabetical', value: 'category' },
+      { label: 'Total', value: 'total' },
+      { label: 'Minimum', value: 'min' },
+      { label: 'Maximum', value: 'max' },
+      { label: 'Sum', value: 'sum' },
+      { label: 'Mean', value: 'mean' },
+      { label: 'Median', value: 'median' },
+      { label: 'Custom Array', value: 'array' },
+    ];
 
     if (clientConfig.allowCustomJSVisualizations) {
       this.chartTypes.custom = { name: 'Custom', icon: 'code' };
