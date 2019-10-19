@@ -120,6 +120,7 @@ const ChartEditor = {
       scatter: { name: 'Scatter', icon: 'circle-o' },
       bubble: { name: 'Bubble', icon: 'circle-o' },
       heatmap: { name: 'Heatmap', icon: 'th' },
+      treemap: { name: 'Treemap', icon: 'th-list' },
       box: { name: 'Box', icon: 'square-o' },
     };
 
@@ -153,7 +154,7 @@ const ChartEditor = {
       $scope.$applyAsync();
     };
 
-    this.showSizeColumnPicker = () => some(this.options.seriesOptions, options => options.type === 'bubble');
+    this.showSizeColumnPicker = () => some(this.options.seriesOptions, options => options.type === 'bubble' || options.type === 'treemap');
     this.showZColumnPicker = () => some(this.options.seriesOptions, options => options.type === 'heatmap');
 
     if (isNil(this.options.customCode)) {

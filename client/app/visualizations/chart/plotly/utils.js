@@ -1,5 +1,5 @@
 import {
-  isArray, isNumber, isString, isUndefined, includes, min, max, has, find,
+  isArray, isNumber, isString, isUndefined, includes, min, max, has, find, findKey, partial, isEqual,
   each, values, sortBy, identity, filter, map, extend, reduce, pick, flatten, uniq,
 } from 'lodash';
 import moment from 'moment';
@@ -152,6 +152,9 @@ function setType(series, type, options) {
     case 'box':
       series.type = 'box';
       series.mode = 'markers';
+      break;
+    case 'treemap':
+      series.type = 'treemap';
       break;
     default:
       break;
@@ -406,7 +409,7 @@ function prepareChartData(seriesList, options) {
 
     // For bubble/scatter charts `y` may be any (similar to `x`) - numeric is only bubble size;
     // for other types `y` is always number
-    const cleanYValue = includes(['bubble', 'scatter'], seriesOptions.type) ? normalizeValue : cleanNumber;
+    const cleanYValue = includes(['bubble', 'scatter', 'treemap'], seriesOptions.type) ? normalizeValue : cleanNumber;
 
     const sourceData = new Map();
     const xValues = [];
@@ -479,6 +482,20 @@ function prepareChartData(seriesList, options) {
         plotlySeries.jitter = 0.3;
         plotlySeries.pointpos = -1.8;
       }
+    } else if (seriesOptions.type === 'treemap') {
+      plotlySeries.parents = plotlySeries.x;
+      plotlySeries.labels = plotlySeries.y;
+      plotlySeries.textinfo = 'label';
+      plotlySeries.hoverinfo = 'label+current path+percent root+percent parent';
+      plotlySeries.pathbar = {
+        visible: false,
+      };
+      if (findKey(options.columnMapping, partial(isEqual, 'size')) &&
+          findKey(options.columnMapping, partial(isEqual, 'size')) !== 'null') {
+        plotlySeries.values = map(data, i => i.size);
+        plotlySeries.textinfo += '+value';
+        plotlySeries.hoverinfo += '+value';
+      }
     }
 
     return plotlySeries;
@@ -537,6 +554,10 @@ export function prepareLayout(element, seriesList, options, data) {
     if (options.globalSeriesType === 'box') {
       result.boxmode = 'group';
       result.boxgroupgap = 0.50;
+    }
+
+    if (options.globalSeriesType === 'treemap') {
+      result.treemapcolorway = ColorPaletteArray;
     }
 
     result.xaxis = {
