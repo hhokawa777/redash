@@ -174,7 +174,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
             className="w-100"
             data-test="Chart.Stacking"
             defaultValue={options.series.stacking}
-            disabled={!includes(['line', 'area', 'column'], options.globalSeriesType)}
+            disabled={!includes(['line', 'area', 'column', 'histogram'], options.globalSeriesType)}
             onChange={stacking => onOptionsChange({ series: { stacking } })}
           >
             <Select.Option value={null} data-test="Chart.Stacking.Disabled">Disabled</Select.Option>

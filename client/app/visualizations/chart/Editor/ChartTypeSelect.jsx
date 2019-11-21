@@ -14,6 +14,7 @@ export default function ChartTypeSelect(props) {
       { type: 'bubble', name: 'Bubble', icon: 'circle-o' },
       { type: 'heatmap', name: 'Heatmap', icon: 'th' },
       { type: 'box', name: 'Box', icon: 'square-o' },
+      { type: 'histogram', name: 'Histogram', icon: 'bar-chart' },
     ];
 
     if (clientConfig.allowCustomJSVisualizations) {

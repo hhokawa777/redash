@@ -11,7 +11,7 @@ import updateData from './updateData';
 import applyLayoutFixes from './applyLayoutFixes';
 import { prepareCustomChartData, createCustomChartRenderer } from './customChartUtils';
 
-Plotly.register([bar, pie, histogram, box, heatmap]);
+Plotly.register([bar, pie, histogram, box, heatmap, histogram]);
 Plotly.setPlotConfig({
   modeBarButtonsToRemove: ['sendDataToCloud'],
 });
