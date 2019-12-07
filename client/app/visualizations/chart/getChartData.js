@@ -1,4 +1,4 @@
-import { isNil, each, forOwn, sortBy, values } from 'lodash';
+import { isNil, isObject, each, forOwn, sortBy, values } from 'lodash';
 
 function addPointToSeries(point, seriesCollection, seriesName) {
   if (seriesCollection[seriesName] === undefined) {
@@ -69,6 +69,10 @@ export default function getChartData(data, options) {
     });
 
     if (isNil(seriesName)) {
+      if (options.globalSeriesType === 'histogram') {
+        point = { x: xValue, y: null, $raw: point.$raw };
+        addPointToSeries(point, series, null);
+      }
       each(yValues, (yValue, ySeriesName) => {
         point = { x: xValue, y: yValue, $raw: point.$raw };
         if (eValue !== null) {
@@ -89,8 +93,8 @@ export default function getChartData(data, options) {
     }
   });
   return sortBy(values(series), ({ name }) => {
-    if (options.seriesOptions[name]) {
-      return options.seriesOptions[name].zIndex;
+    if (isObject(options.seriesOptions[name])) {
+      return options.seriesOptions[name].zIndex || 0;
     }
     return 0;
   });
