@@ -1,4 +1,4 @@
-import { isNil, isObject, each, forOwn, sortBy, values } from 'lodash';
+import { isNil, isObject, isEmpty, each, forOwn, sortBy, values } from 'lodash';
 
 function addPointToSeries(point, seriesCollection, seriesName) {
   if (seriesCollection[seriesName] === undefined) {
@@ -69,25 +69,26 @@ export default function getChartData(data, options) {
     });
 
     if (isNil(seriesName)) {
-      if (options.globalSeriesType === 'histogram') {
+      if (options.globalSeriesType === 'histogram' && isEmpty(yValues)) {
         point = { x: xValue, y: null, $raw: point.$raw };
-        addPointToSeries(point, series, null);
+        addPointToSeries(point, series, 'Count');
+      } else {
+        each(yValues, (yValue, ySeriesName) => {
+          point = { x: xValue, y: yValue, $raw: point.$raw };
+          if (eValue !== null) {
+            point.yError = eValue;
+          }
+
+          if (sizeValue !== null) {
+            point.size = sizeValue;
+          }
+
+          if (zValue !== null) {
+            point.zVal = zValue;
+          }
+          addPointToSeries(point, series, ySeriesName);
+        });
       }
-      each(yValues, (yValue, ySeriesName) => {
-        point = { x: xValue, y: yValue, $raw: point.$raw };
-        if (eValue !== null) {
-          point.yError = eValue;
-        }
-
-        if (sizeValue !== null) {
-          point.size = sizeValue;
-        }
-
-        if (zValue !== null) {
-          point.zVal = zValue;
-        }
-        addPointToSeries(point, series, ySeriesName);
-      });
     } else {
       addPointToSeries(point, series, seriesName);
     }
