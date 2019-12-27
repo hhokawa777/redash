@@ -116,6 +116,25 @@ function prepareBoxLayout(layout, options, data) {
   return layout;
 }
 
+function prepareRadarLayout(layout, options, data) {
+  layout = prepareDefaultLayout(layout, options, data);
+  layout.polar = [];
+
+  layout.margin.b = 20;
+  layout.polar.radialaxis = {
+    range: [options.yAxis[0].rangeMin, options.yAxis[0].rangeMax],
+    type: options.yAxis[0].type,
+  };
+
+  if (!options.xAxis.labels.enabled) {
+    layout.polar.angularaxis = {
+      ticks: "",
+      showticklabels: false,
+    };
+  }
+  return layout;
+}
+
 export default function prepareLayout(element, options, data) {
   const layout = {
     margin: { l: 10, r: 10, b: 10, t: 25, pad: 4 },
@@ -130,6 +149,8 @@ export default function prepareLayout(element, options, data) {
       return preparePieLayout(layout, options, data);
     case "box":
       return prepareBoxLayout(layout, options, data);
+    case "radar":
+      return prepareRadarLayout(layout, options, data);
     default:
       return prepareDefaultLayout(layout, options, data);
   }

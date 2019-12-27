@@ -10,6 +10,7 @@ export default function ChartTypeSelect(props) {
       { type: "column", name: "Bar", icon: "bar-chart" },
       { type: "area", name: "Area", icon: "area-chart" },
       { type: "pie", name: "Pie", icon: "pie-chart" },
+      { type: "radar", name: "Radar", icon: "bullseye" },
       { type: "scatter", name: "Scatter", icon: "circle-o" },
       { type: "bubble", name: "Bubble", icon: "circle-o" },
       { type: "heatmap", name: "Heatmap", icon: "th" },

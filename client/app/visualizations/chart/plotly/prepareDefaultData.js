@@ -70,6 +70,22 @@ function prepareBoxSeries(series, options, { seriesColor }) {
   return series;
 }
 
+function prepareRadarSeries(series, options) {
+  series.mode = "markers+lines" + (options.showDataLabels ? "+text" : "");
+  series.type = "scatterpolar";
+  series.theta = series.x;
+  series.r = series.y;
+  series.theta.push(series.x[0]);
+  series.r.push(series.y[0]);
+  series.connactgaps = "true";
+  series.textposition = "top right";
+  series.textfont = { color: series.marker.color };
+  // const xName = Object.keys(options.columnMapping).find(x => options.columnMapping[x].includes("x"));
+  // const yName = Object.keys(options.columnMapping).find(x => options.columnMapping[x].includes("y"));
+  series.hovertemplate = "Az: %{x}, El: %{y}";
+  return series;
+}
+
 function prepareSeries(series, options, additionalOptions) {
   const { hoverInfoPattern, index } = additionalOptions;
 
@@ -144,6 +160,8 @@ function prepareSeries(series, options, additionalOptions) {
       return prepareBubbleSeries(plotlySeries, options, additionalOptions);
     case "box":
       return prepareBoxSeries(plotlySeries, options, additionalOptions);
+    case "radar":
+      return prepareRadarSeries(plotlySeries, options, additionalOptions);
     default:
       return plotlySeries;
   }
