@@ -118,19 +118,20 @@ function prepareBoxLayout(layout, options, data) {
 
 function prepareRadarLayout(layout, options, data) {
   layout = prepareDefaultLayout(layout, options, data);
-  layout.polar = [];
-
   layout.margin.b = 20;
-  layout.polar.radialaxis = {
-    range: [options.yAxis[0].rangeMin, options.yAxis[0].rangeMax],
-    type: options.yAxis[0].type,
+  layout.polar = {
+    radialaxis: {
+      range: [options.yAxis[0].rangeMin, options.yAxis[0].rangeMax],
+      type: options.yAxis[0].type,
+    },
+    angularaxis: {
+      categoryorder: layout.xaxis.categoryorder,
+    },
   };
 
   if (!options.xAxis.labels.enabled) {
-    layout.polar.angularaxis = {
-      ticks: "",
-      showticklabels: false,
-    };
+    layout.polar.angularaxis.ticks = "";
+    layout.polar.angularaxis.showticklabels = false;
   }
   return layout;
 }

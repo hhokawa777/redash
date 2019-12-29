@@ -91,10 +91,6 @@ function updateSeriesText(seriesList, options) {
 
       series.text.push(formatText(text));
     });
-    // avoid first data label to look blurred
-    if (options.globalSeriesType === "radar") {
-      series.text.pop();
-    }
   });
 }
 

@@ -22,7 +22,7 @@ function getAvailableColumnMappingTypes(options) {
     result.push("zVal");
   }
 
-  if (!includes(["custom", "bubble", "heatmap"], options.globalSeriesType)) {
+  if (!includes(["custom", "bubble", "heatmap", "radar"], options.globalSeriesType)) {
     result.push("yError");
   }
 
@@ -190,7 +190,7 @@ export default function GeneralSettings({ options, data, onOptionsChange }) {
         </Section>
       )}
 
-      {!includes(["custom", "heatmap"], options.globalSeriesType) && (
+      {!includes(["custom", "heatmap", "radar"], options.globalSeriesType) && (
         <Section>
           <Select
             label="Stacking"

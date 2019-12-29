@@ -80,9 +80,9 @@ function prepareRadarSeries(series, options) {
   series.connactgaps = "true";
   series.textposition = "top right";
   series.textfont = { color: series.marker.color };
-  // const xName = Object.keys(options.columnMapping).find(x => options.columnMapping[x].includes("x"));
-  // const yName = Object.keys(options.columnMapping).find(x => options.columnMapping[x].includes("y"));
-  series.hovertemplate = "Az: %{x}, El: %{y}";
+  series.thetaName = Object.keys(options.columnMapping).find(x => options.columnMapping[x].includes("x"));
+  series.rName = Object.keys(options.columnMapping).find(x => options.columnMapping[x].includes("y"));
+  series.hovertemplate = "%{data.rName}:%{r}<br>%{data.thetaName}:%{theta}";
   return series;
 }
 
